@@ -3,15 +3,15 @@ var queryUrl = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_we
 
 
 d3.json(queryUrl, function (data) {
-  createFeatures(data.features);
+  Feature(data.features);
   console.log(data.features)
 });
 
-function createFeatures(earthquakeData) {
+function Feature(earthquakeData) {
 
   // Define a function that runs once for each feature
   // Give each feature a popup 
-  function onEachFeature(feature, layer) {
+  function eachFeature(feature, layer) {
     layer.bindPopup("<h3>" + feature.properties.place +
       "</h3><hr><p>" + new Date(feature.properties.time) + "</p>");
   }
@@ -24,22 +24,22 @@ function createFeatures(earthquakeData) {
   // Define function to set the circle color based on the magnitude
   function circleColor(magnitude) {
     if (magnitude < 1) {
-      return "#ccff33"
+      return "cyan"
     }
     else if (magnitude < 2) {
-      return "#ffff33"
+      return "blue"
     }
     else if (magnitude < 3) {
-      return "#ffcc33"
+      return "yellow"
     }
     else if (magnitude < 4) {
-      return "#ff9933"
+      return "purple"
     }
     else if (magnitude < 5) {
-      return "#ff6633"
+      return "green"
     }
     else {
-      return "#ff3333"
+      return "red"
     }
   }
 
@@ -53,7 +53,7 @@ function createFeatures(earthquakeData) {
         fillOpacity: 1
       });
     },
-    onEachFeature: onEachFeature
+    eachFeature: eachFeature
   });
 
   // Sending our earthquakes layer to the createMap function
@@ -122,23 +122,23 @@ function createMap(earthquakes) {
   d3.json(faultlinequery, function (data) {
     L.geoJSON(data, {
       style: function () {
-        return { color: "orange", fillOpacity: 0 }
+        return { color: "black", fillOpacity: 0 }
       }
     }).addTo(faultLine)
   })
 
   // color function to be used when creating the legend
   function getColor(d) {
-    return d > 5 ? '#ff3333' :
-      d > 4 ? '#ff6633' :
-        d > 3 ? '#ff9933' :
-          d > 2 ? '#ffcc33' :
-            d > 1 ? '#ffff33' :
-              '#ccff33';
+    return d > 5 ? 'blue' :
+      d > 4 ? 'green' :
+        d > 3 ? 'purple' :
+          d > 2 ? 'yellow' :
+            d > 1 ? 'red' :
+              'cyan';
   }
 
   // Add legend to the map
-  var legend = L.control({ position: 'bottomright' });
+  var legend = L.control({ position: 'bottomleft' });
 
   legend.onAdd = function (map) {
 
